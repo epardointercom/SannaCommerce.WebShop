@@ -1,0 +1,49 @@
+﻿@using SannaCommerce.WebShop.Presentation.Web.Models
+@model OrdersModel
+@{
+    ViewBag.Title = "Orders";
+}
+@if (Model.ToSave)
+{
+    using (Html.BeginForm("SaveChanges", "Orders", FormMethod.Post, new { @class = "pull-right" }))
+    {
+        @Html.AntiForgeryToken()
+        <button class="save-changes btn btn-success" type="submit" data-name="orders">Save Changes</button>
+    }
+}
+<h2>@ViewBag.Title</h2>
+<h5><a href="~/Orders/New">New Order</a></h5>
+<table class="table datatable">
+    <thead>
+        <tr>
+            <th>IdOrder</th>
+            <th>Customer</th>
+            <th>Date Order</th>
+            <th class="no-short">Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Orders)
+        {
+            <tr>
+                <td>@item.IdOrder</td>
+                <td>@(Model.Customers.Where(x => x.IdCustomer == item.IdCustomer)?.FirstOrDefault().Name ?? "")</td>
+                <td>@item.DateOrder.ToString("dddd dd, MMMM yyyy")</td>
+                <td class="columm-links">
+                    @if(item.IdOrder > 0)
+                    {
+                        <a href="~/Orders/Edit/@item.IdOrder">Edit</a>
+                        <a href="~/Orders/Delete/@item.IdOrder">Delete</a>
+                        <a href="~/Orders/Detail/@item.IdOrder">Details</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (Model.ToSave)
+{
+    <script>
+        UpdateLocalStorageModels(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, string>() { { "name", "orders" }, { "url", @Url.Content("~/Orders/") }, { "urlSync", Url.Content("~/Changes/Orders") }, { "model", Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)).ToHtmlString() } })));
+    </script>
+}

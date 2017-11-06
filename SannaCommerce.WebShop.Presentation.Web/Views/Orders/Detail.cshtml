@@ -1,0 +1,26 @@
+﻿@using SannaCommerce.WebShop.Presentation.Web.Models
+@model OrdersModel
+@{
+    ViewBag.Title = "Detail Order";
+}
+<h2>@ViewBag.Title</h2>
+<table class="table datatable">
+    <thead>
+        <tr>
+            <th>IdOrderDeatil</th>
+            <th>Product</th>
+            <th>Items</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderDetails)
+        {
+            <tr>
+                <td>@item.IdProduct</td>
+                <td>@Model.Products.Where(x => x.IdProduct == item.IdProduct).FirstOrDefault().Name</td>
+                <td>@item.QuantityProducts</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<h5><a href="~/Orders"><< Products</a></h5>

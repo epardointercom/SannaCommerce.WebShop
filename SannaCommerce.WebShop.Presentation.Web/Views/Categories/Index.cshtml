@@ -1,0 +1,50 @@
+﻿@using SannaCommerce.WebShop.Presentation.Web.Models
+@model CategoriesModel
+@{
+    ViewBag.Title = "Categories";
+}
+@if (Model.ToSave)
+{
+    using (Html.BeginForm("SaveChanges", "Categories", FormMethod.Post, new { @class = "pull-right" }))
+    {
+        @Html.AntiForgeryToken()
+        <button class="save-changes btn btn-success" type="submit" data-name="categories">Save Changes</button>
+    }
+}
+<h2>@ViewBag.Title</h2>
+<h5><a href="~/Categories/New">New Category</a></h5>
+<table class="table datatable">
+    <thead>
+        <tr>
+            <th>IdCategory</th>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Description</th>
+            <th class="no-short">Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Categories)
+        {
+            <tr>
+                <td>@item.IdCategory</td>
+                <td>@item.Name</td>
+                <td>@item.Code</td>
+                <td>@item.Description</td>
+                <td class="columm-links">
+                    @if (item.IdCategory > 0)
+                    {
+                        <a href="~/Categories/Edit/@item.IdCategory">Edit</a>
+                        <a href="~/Categories/Delete/@item.IdCategory">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (Model.ToSave)
+{
+    <script>
+        UpdateLocalStorageModels(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, string>() { { "name", "categories" }, { "url", @Url.Content("~/Categories/") }, { "urlSync", Url.Content("~/Changes/Categories") }, { "model", Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)).ToHtmlString() } })));
+    </script>
+}

@@ -1,0 +1,24 @@
+﻿@using SannaCommerce.WebShop.Presentation.Web.Models
+@model CategoriesModel
+@{
+    ViewBag.Title = "New Category";
+}
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("New", "Categories", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-item">
+        <label>Name:</label>
+        @Html.TextBoxFor(m => m.Name, new { @required = "required" })
+    </div>
+    <div class="form-item">
+        <label>Code:</label>
+        @Html.TextBoxFor(m => m.Code, new { @required = "required" })
+    </div>
+    <div class="form-item">
+        <label>Description:</label>
+        @Html.TextAreaFor(m => m.Description, new { @required = "required" })
+    </div>
+    <button class="btn btn-success" type="submit">Submit</button>
+}
+<h5><a href="~/Categories"><< Categories</a></h5>

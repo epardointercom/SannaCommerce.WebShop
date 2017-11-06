@@ -1,0 +1,22 @@
+﻿@using SannaCommerce.WebShop.Presentation.Web.Models
+@model OrdersModel
+@{
+    ViewBag.Title = "Delete Order";
+}
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("Delete", "Orders", FormMethod.Post, new { @ng_controller = "Orders" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.IdOrder)
+    <div class="form-item">
+        <label>Order Date:</label>
+        @Html.TextBoxFor(m => m.DateOrder, "{0:dd/MM/yyyy}", new { @readonly = "readonly" })
+    </div>
+    <div class="form-item">
+        <label>Customer:</label>
+        @Html.TextBoxFor(m => m.Customers.Where(x => x.IdCustomer == Model.IdCustomer).FirstOrDefault().Name, new { @readonly = "readonly" })
+    </div>
+    <button class="btn btn-success" type="submit">Submit</button>
+}
+<h5><a href="~/Orders"><< Orders</a></h5>
+

@@ -1,0 +1,59 @@
+﻿@using SannaCommerce.WebShop.Presentation.Web.Models
+@model OrdersModel
+@{
+    ViewBag.Title = "Edit Order";
+}
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("Edit", "Orders", FormMethod.Post, new { @ng_controller = "Orders" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.IdOrder)
+    <div class="form-item">
+        <label>Order Date:</label>
+        @Html.TextBoxFor(m => m.DateOrder, "{0:dd/MM/yyyy}", new { @Value = DateTime.Now.ToString("dd/MM/yyyy"), @readonly = "readonly" })
+    </div>
+    <div class="form-item">
+        <label>Customer:</label>
+        @Html.DropDownListFor(m => m.IdCustomer, new SelectList(Model.Customers, "IdCustomer", "Name"), new { @required = "required" })
+    </div>
+    <h4>Details:</h4>
+    @Html.TextBoxFor(m => m.JsonOrderDetails, new { @Value = "{{details}}", ng_show = "false" })
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Items</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in details">
+                <td>
+                    {{item.NameProduct}}
+                </td>
+                <td>
+                    {{item.QuantityProducts}}
+                </td>
+                <td class="columm-links">
+                    <div class="btn btn-link" ng-click="deleteOrderDetail(item.IdProduct)">Delete</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DropDownList("idProduct", new SelectList(Model.Products, "IdProduct", "Name"), String.Empty)
+                </td>
+                <td>
+                    <input id="quantity" type="number" step="1" ng-model="quantity" />
+                </td>
+                <td class="columm-links">
+                    <div class="btn btn-link" ng-click="addOrderDetail()">Add</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="btn btn-success" type="submit">Submit</button>
+}
+<h5><a href="~/Orders"><< Orders</a></h5>
+<script>
+    var dataDetails = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OrderDetails));
+</script>

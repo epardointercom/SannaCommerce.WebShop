@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Web Shop</title>
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/general")
+    <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+    @Styles.Render("~/Content/style")
+</head>
+<body ng-app="app">
+    <div class="content">
+        @if (SessionManager.PendingChanges)
+        {
+            <div class="pending">
+                @using (Html.BeginForm("Cancel", "Changes", FormMethod.Post, new { @onsubmit = "return confirm('Are you sure to cancel all changes?')" }))
+                {
+                    <div>There are pending changes to saved in memory<span class="pending-text"></span></div>
+                    <button type="submit" class="btn btn-warning">Cancel Changes</button>
+                }
+            </div>
+        }
+        @if (SessionManager.CancelChanges)
+        {
+            <script>
+                localStorage.removeItem('sessionModels');
+                localStorage.removeItem('pendingSave');
+            </script>
+        }
+        else
+        {
+            <script>
+                PendingChanges(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(SessionManager.PendingChanges)));
+            </script>
+        }
+        <header>
+            <img class="header-logo" src="~/Content/Img/logo_sana.png" />
+        </header>
+        <div class="body-container">
+            <nav>
+                <ul>
+                    <li>
+                        <a class="nav-option" href="~/Orders">Orders</a>
+                    </li>
+                    <li>
+                        <a class="nav-option" href="~/Customers">Customers</a>
+                    </li>
+                    <li>
+                        <a class="nav-option" href="~/Products">Products</a>
+                    </li>
+                    <li>
+                        <a class="nav-option" href="~/Categories">Categories</a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="body">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,33 @@
+﻿@using SannaCommerce.WebShop.Presentation.Web.Models
+@model CustomersModel
+@{
+    ViewBag.Title = "Edit Customer";
+}
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("Edit", "Customers", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.IdCustomer)
+    <div class="form-item">
+        <label>Name:</label>
+        @Html.TextBoxFor(m => m.Name, new { @required = "required" })
+    </div>
+    <div class="form-item">
+        <label>Phone:</label>
+        @Html.TextBoxFor(m => m.Phone, new { @required = "required" })
+    </div>
+    <div class="form-item">
+        <label>Address:</label>
+        @Html.TextBoxFor(m => m.Address, new { @required = "required" })
+    </div>
+    <div class="form-item">
+        <label>Email:</label>
+        @Html.TextBoxFor(m => m.Email, new { @required = "required" })
+    </div>
+    <div class="form-item">
+        <label>Birthdate:</label>
+        @Html.TextBoxFor(m => m.Birthdate, "{0:dd/MM/yyyy}", new { @required = "required", @Value = (Model.Birthdate == new DateTime() ? String.Empty : Model.Birthdate.ToString("dd/MM/yyyy")), @placeholder = "dd/MM/yyyy" })
+    </div>
+    <button class="btn btn-success" type="submit">Submit</button>
+}
+<h5><a href="~/Customers"><< Customers</a></h5>

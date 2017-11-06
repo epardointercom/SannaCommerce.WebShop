@@ -1,0 +1,25 @@
+﻿@using SannaCommerce.WebShop.Presentation.Web.Models
+@model CategoriesModel
+@{
+    ViewBag.Title = "Delete Category";
+}
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("Delete", "Categories", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.IdCategory)
+    <div class="form-item">
+        <label>Name:</label>
+        @Html.TextBoxFor(m => m.Name, new { @readonly = "readonly" })
+    </div>
+    <div class="form-item">
+        <label>Code:</label>
+        @Html.TextBoxFor(m => m.Code, new { @readonly = "readonly" })
+    </div>
+    <div class="form-item">
+        <label>Description:</label>
+        @Html.TextAreaFor(m => m.Description, new { @readonly = "readonly" })
+    </div>
+    <button class="btn btn-success" type="submit">Submit</button>
+}
+<h5><a href="~/Categories"><< Categories</a></h5>

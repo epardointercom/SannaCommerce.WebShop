@@ -1,0 +1,56 @@
+﻿@using SannaCommerce.WebShop.Presentation.Web.Models
+@model CustomersModel
+@{
+    ViewBag.Title = "Customers";
+}
+@if (Model.ToSave)
+{
+    using (Html.BeginForm("SaveChanges", "Customers", FormMethod.Post, new { @class = "pull-right" }))
+    {
+        @Html.AntiForgeryToken()
+        <button class="save-changes btn btn-success" type="submit" data-name="customers">Save Changes</button>
+    }
+}
+<h2>@ViewBag.Title</h2>
+<h5><a href="~/Customers/New">New Customer</a></h5>
+<table class="table datatable">
+    <thead>
+        <tr>
+            <th>IdCustomer</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Age</th>
+            <th>Birthdate</th>
+            <th class="no-sort">Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Customers)
+        {
+            <tr>
+                <td>@item.IdCustomer</td>
+                <td>@item.Name.ToUpper()</td>
+                <td>@item.Phone</td>
+                <td>@item.Address</td>
+                <td>@item.Email</td>
+                <td>@(DateTime.Now < item.Birthdate.AddYears(DateTime.Now.Year - item.Birthdate.Year) ? ((DateTime.Now.Year - item.Birthdate.Year) - 1) : (DateTime.Now.Year - item.Birthdate.Year))</td>
+                <td>@item.Birthdate.ToString("MMMM dd")</td>
+                <td class="columm-links">
+                    @if (item.IdCustomer > 0)
+                    {
+                        <a href="~/Customers/Edit/@item.IdCustomer">Edit</a>
+                        <a href="~/Customers/Delete/@item.IdCustomer">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (Model.ToSave)
+{
+    <script>
+        UpdateLocalStorageModels(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, string>() { { "name", "customers" }, { "url", @Url.Content("~/Customers/") }, { "urlSync", Url.Content("~/Changes/Customers") }, { "model", Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)).ToHtmlString() } })));
+    </script>
+}
